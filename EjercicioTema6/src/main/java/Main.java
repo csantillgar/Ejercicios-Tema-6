@@ -9,7 +9,7 @@ public class Main {
         JFrame frame = new JFrame("Ejercicio 1: Clase Pareja");
         frame.setSize(300, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         JButton botonEjercicio1 = new JButton("Ejercicio 1");
