@@ -1,63 +1,79 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 import Ejercicio1.Pareja;
+import Ejercicio2.ListaDatosReales;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Ejercicio 1: Clase Pareja");
-        frame.setSize(300, 200);
+        // Cambiar la fuente por defecto a Times New Roman
+        UIManager.put("OptionPane.messageFont", new Font("Times New Roman", Font.PLAIN, 16));
+        UIManager.put("OptionPane.buttonFont", new Font("Times New Roman", Font.PLAIN, 16));
+        UIManager.put("Label.font", new Font("Times New Roman", Font.PLAIN, 16));
+        UIManager.put("Button.font", new Font("Times New Roman", Font.PLAIN, 16));
+
+        JFrame frame = new JFrame("Ejercicios");
+        frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        JButton botonEjercicio1 = new JButton("Ejercicio 1");
-
-        botonEjercicio1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Llamar a la ventana para el ejercicio 1
-                ejercicio1();
-            }
-        });
-
-        panel.add(botonEjercicio1);
         frame.add(panel);
+        placeComponents(panel);
+
         frame.setVisible(true);
     }
 
-    public static void ejercicio1() {
-        JFrame ejercicio1Frame = new JFrame("Ejercicio 1: Clase Pareja");
-        ejercicio1Frame.setSize(300, 200);
+    private static void placeComponents(JPanel panel) {
+        panel.setLayout(new GridLayout(0, 1));
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
+        JLabel titleLabel = new JLabel("Ejercicios Tema 6");
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        panel.add(titleLabel);
 
-        JTextField inputDato1 = new JTextField();
-        JTextField inputDato2 = new JTextField();
-        JButton botonMostrar = new JButton("Mostrar Pareja");
+        JButton ejercicio1Button = new JButton("Ejercicio 1");
+        panel.add(ejercicio1Button);
 
-        panel.add(new JLabel("Ingrese el primer dato:"));
-        panel.add(inputDato1);
-        panel.add(new JLabel("Ingrese el segundo dato:"));
-        panel.add(inputDato2);
-        panel.add(botonMostrar);
+        JButton ejercicio2Button = new JButton("Ejercicio 2");
+        panel.add(ejercicio2Button);
 
-        botonMostrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Crear una instancia de Pareja con los datos ingresados por el usuario
-                Pareja<String> pareja = new Pareja<>(inputDato1.getText(), inputDato2.getText());
-
-                // Mostrar los datos de la pareja en un JOptionPane
-                JOptionPane.showMessageDialog(null,
-                        "Dato 1: " + pareja.getDato1() + "\n" +
-                                "Dato 2: " + pareja.getDato2());
-            }
+        // Acción del botón del Ejercicio 1
+        ejercicio1Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 1");
+            ejercicio1();
         });
 
-        ejercicio1Frame.add(panel);
-        ejercicio1Frame.setVisible(true);
+        // Acción del botón del Ejercicio 2
+        ejercicio2Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 2");
+            ejercicio2();
+        });
+    }
+
+    // Definición de los métodos para cada ejercicio
+    private static void ejercicio1() {
+        Pareja<String> parejaString = obtenerParejaUsuario("string");
+        Pareja<Integer> parejaInteger = obtenerParejaUsuario("entero");
+
+        JOptionPane.showMessageDialog(null, "Pareja de String:\nPrimero: " + parejaString.getPrimero() +
+                "\nSegundo: " + parejaString.getSegundo());
+
+        JOptionPane.showMessageDialog(null, "Pareja de Integer:\nPrimero: " + parejaInteger.getPrimero() +
+                "\nSegundo: " + parejaInteger.getSegundo());
+    }
+
+
+    private static void ejercicio2() {
+        int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Introduce la cantidad de números reales a generar:"));
+        List<Double> lista = ListaDatosReales.generarLista(cantidad);
+        ListaDatosReales.mostrarLista(lista);
+    }
+
+    // Método para obtener la pareja de valores del usuario
+    private static Pareja obtenerParejaUsuario(String tipo) {
+        String primero = JOptionPane.showInputDialog("Introduce el primer valor para la pareja de " + tipo + ":");
+        String segundo = JOptionPane.showInputDialog("Introduce el segundo valor para la pareja de " + tipo + ":");
+        return new Pareja<>(primero, segundo);
     }
 }
