@@ -2,10 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import javax.swing.*;
-import java.awt.*;
 import java.util.Set;
 import java.util.TreeSet;
+import java.time.LocalDate;
 
 
 
@@ -18,6 +17,7 @@ import Ejercicio6.ListaCadenasOrdenadaej6;
 import Ejercicio7.MapaNumerosTexto;
 import Ejercicio8.MapaNumerosLetras;
 import Ejercicio9.NombreCompleto;
+import Ejercicio10.Venta;
 
 
 
@@ -79,6 +79,9 @@ public class Main {
         JButton ejercicio9Button = new JButton("Ejercicio 9");
         panel.add(ejercicio9Button);
 
+        JButton ejercicio10Button = new JButton("Ejercicio 10");
+        panel.add(ejercicio10Button);
+
         // Acción del botón del Ejercicio 1
         ejercicio1Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 1");
@@ -131,6 +134,12 @@ public class Main {
         ejercicio9Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 9");
             ejercicio9();
+        });
+
+        // Acción del botón del Ejercicio 10
+        ejercicio10Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 10");
+            ejercicio10();
         });
     }
 
@@ -294,6 +303,30 @@ public class Main {
         JOptionPane.showMessageDialog(null, listaNombres.toString());
     }
 
+    private static void ejercicio10() {
+        // Crear un TreeSet para almacenar las ventas ordenadas
+        Set<Venta> ventasOrdenadas = new TreeSet<>();
+
+        // Solicitar al usuario que ingrese los datos de la venta
+        String opcion;
+        do {
+            String producto = JOptionPane.showInputDialog("Introduce el nombre del producto:");
+            String cliente = JOptionPane.showInputDialog("Introduce el nombre del cliente:");
+            double precio = Double.parseDouble(JOptionPane.showInputDialog("Introduce el precio de la venta:"));
+            LocalDate fecha = LocalDate.now(); // Fecha actual
+            Venta venta = new Venta(producto, cliente, precio, fecha);
+            ventasOrdenadas.add(venta);
+            opcion = JOptionPane.showInputDialog("¿Deseas ingresar otra venta? (s/n):");
+        } while (!opcion.equalsIgnoreCase("n"));
+
+        // Mostrar las ventas ordenadas
+        StringBuilder listaVentas = new StringBuilder("Ventas ordenadas:\n");
+        for (Venta venta : ventasOrdenadas) {
+            listaVentas.append(venta).append("\n");
+        }
+        JOptionPane.showMessageDialog(null, listaVentas.toString());
+    }
+
 
 
     // Método para obtener la pareja de valores del usuario
@@ -303,3 +336,5 @@ public class Main {
         return new Pareja<>(primero, segundo);
     }
 }
+
+
