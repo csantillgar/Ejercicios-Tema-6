@@ -1,10 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.time.LocalDate;
+import java.util.List;
 
 import Ejercicio1.Pareja;
 import Ejercicio2.ListaDatosReales;
@@ -17,6 +15,7 @@ import Ejercicio8.MapaNumerosLetras;
 import Ejercicio9.NombreCompleto;
 import Ejercicio10.Venta;
 import Ejercicio11.GestorArchivos;
+import Ejercicio12.FileIndexer;
 
 
 
@@ -29,11 +28,11 @@ public class Main {
         UIManager.put("Button.font", new Font("Times New Roman", Font.PLAIN, 16));
 
         JFrame frame = new JFrame("Ejercicios");
-        frame.setSize(400, 300);
+        frame.setSize(600, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridBagLayout()); // Usamos GridBagLayout para mayor flexibilidad
         frame.add(panel);
         placeComponents(panel);
 
@@ -83,6 +82,12 @@ public class Main {
 
         JButton ejercicio11Button = new JButton("Ejercicio 11");
         panel.add(ejercicio11Button);
+
+        JButton ejercicio12Button = new JButton("Ejercicio 12");
+        panel.add(ejercicio12Button);
+
+        JButton rendimientoButton = new JButton("Comparar Rendimiento de Ordenación");
+        panel.add(rendimientoButton);
 
         // Acción del botón del Ejercicio 1
         ejercicio1Button.addActionListener(e -> {
@@ -149,6 +154,20 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 11");
             ejercicio11();
         });
+
+        // Acción del botón del Ejercicio 12
+        ejercicio12Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 12");
+            ejercicio12();
+        });
+
+        rendimientoButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Comparando rendimiento de ordenación...");
+            ejercicioRendimientoOrdenacion();
+            JOptionPane.showMessageDialog(null, "Comparación de rendimiento completa.");
+        });
+
+
     }
 
     // Método para el Ejercicio 1
@@ -344,6 +363,42 @@ public class Main {
         GestorArchivos.ordenarArchivo(rutaEntrada, rutaSalida);
     }
 
+    private static void ejercicio12() {
+        // Crear un objeto FileIndexer
+        FileIndexer fileIndexer = new FileIndexer();
+
+        // Indexar el contenido del directorio de inicio del usuario
+        String userHomeDirectory = System.getProperty("user.home");
+        fileIndexer.indexFiles(userHomeDirectory);
+
+        // Mostrar opciones al usuario
+        String[] options = {"Buscar archivo por nombre", "Listar archivos ordenados alfabéticamente"};
+        int choice = JOptionPane.showOptionDialog(null, "Selecciona una opción:", "Ejercicio 12", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+        switch (choice) {
+            case 0: // Buscar archivo por nombre
+                String fileName = JOptionPane.showInputDialog("Introduce el nombre del archivo:");
+                String filePath = fileIndexer.getFilePath(fileName);
+                if (filePath != null) {
+                    JOptionPane.showMessageDialog(null, "La ruta del archivo '" + fileName + "' es:\n" + filePath);
+                } else {
+                    JOptionPane.showMessageDialog(null, "El archivo '" + fileName + "' no se encontró en el directorio.");
+                }
+                break;
+            case 1: // Listar archivos ordenados alfabéticamente
+                List<String> sortedFiles = fileIndexer.getAllFilesSorted();
+                StringBuilder filesList = new StringBuilder("Archivos ordenados alfabéticamente:\n");
+                for (String file : sortedFiles) {
+                    filesList.append(file).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, filesList.toString());
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
+        }
+    }
+
 
 
     // Método para obtener la pareja de valores del usuario
@@ -351,6 +406,50 @@ public class Main {
         String primero = JOptionPane.showInputDialog("Introduce el primer valor para la pareja de " + tipo + ":");
         String segundo = JOptionPane.showInputDialog("Introduce el segundo valor para la pareja de " + tipo + ":");
         return new Pareja<>(primero, segundo);
+    }
+
+    // Método para comparar el rendimiento de la ordenación
+    private static void ejercicioRendimientoOrdenacion() {
+        int cantidad = 1_000_000;
+        int[] numerosAleatorios = new int[cantidad];
+
+        // Generar números aleatorios
+        for (int i = 0; i < cantidad; i++) {
+            numerosAleatorios[i] = (int) (Math.random() * 1_000_000);
+        }
+
+        // Ordenar utilizando TreeSet
+        long startTime = System.nanoTime();
+        Set<Integer> treeSet = new TreeSet<>();
+        for (int num : numerosAleatorios) {
+            treeSet.add(num);
+        }
+        long endTimeTreeSet = System.nanoTime();
+        long tiempoTreeSet = endTimeTreeSet - startTime;
+
+        // Ordenar utilizando Collections.sort()
+        startTime = System.nanoTime();
+        List<Integer> arrayList = new ArrayList<>();
+        for (int num : numerosAleatorios) {
+            arrayList.add(num);
+        }
+        Collections.sort(arrayList);
+        long endTimeCollectionsSort = System.nanoTime();
+        long tiempoCollectionsSort = endTimeCollectionsSort - startTime;
+
+        // Ordenar utilizando Arrays.sort()
+        startTime = System.nanoTime();
+        Arrays.sort(numerosAleatorios);
+        long endTimeArraysSort = System.nanoTime();
+        long tiempoArraysSort = endTimeArraysSort - startTime;
+
+        // Mostrar tiempos de ordenación en una ventana emergente
+        StringBuilder message = new StringBuilder();
+        message.append("Tiempo de ordenación utilizando TreeSet: ").append(tiempoTreeSet).append(" nanosegundos.\n");
+        message.append("Tiempo de ordenación utilizando Collections.sort(): ").append(tiempoCollectionsSort).append(" nanosegundos.\n");
+        message.append("Tiempo de ordenación utilizando Arrays.sort(): ").append(tiempoArraysSort).append(" nanosegundos.");
+
+        JOptionPane.showMessageDialog(null, message.toString(), "Tiempos de Ordenación", JOptionPane.INFORMATION_MESSAGE);
     }
 }
 
