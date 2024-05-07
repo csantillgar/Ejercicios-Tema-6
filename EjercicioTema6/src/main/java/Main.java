@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.time.LocalDate;
 
-
-
 import Ejercicio1.Pareja;
 import Ejercicio2.ListaDatosReales;
 import Ejercicio3.ListaParejasEnteros;
@@ -18,6 +16,7 @@ import Ejercicio7.MapaNumerosTexto;
 import Ejercicio8.MapaNumerosLetras;
 import Ejercicio9.NombreCompleto;
 import Ejercicio10.Venta;
+import Ejercicio11.GestorArchivos;
 
 
 
@@ -82,6 +81,9 @@ public class Main {
         JButton ejercicio10Button = new JButton("Ejercicio 10");
         panel.add(ejercicio10Button);
 
+        JButton ejercicio11Button = new JButton("Ejercicio 11");
+        panel.add(ejercicio11Button);
+
         // Acción del botón del Ejercicio 1
         ejercicio1Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 1");
@@ -140,6 +142,12 @@ public class Main {
         ejercicio10Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 10");
             ejercicio10();
+        });
+
+        // Acción del botón del Ejercicio 11
+        ejercicio11Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 11");
+            ejercicio11();
         });
     }
 
@@ -325,6 +333,15 @@ public class Main {
             listaVentas.append(venta).append("\n");
         }
         JOptionPane.showMessageDialog(null, listaVentas.toString());
+    }
+
+    // Método para el Ejercicio 11
+    private static void ejercicio11() {
+        String rutaEntrada = JOptionPane.showInputDialog("Introduce la ruta del archivo de entrada:");
+        String rutaSalida = JOptionPane.showInputDialog("Introduce la ruta del archivo de salida:");
+
+        // Llamar al método de GestorArchivos para ordenar el archivo
+        GestorArchivos.ordenarArchivo(rutaEntrada, rutaSalida);
     }
 
 
