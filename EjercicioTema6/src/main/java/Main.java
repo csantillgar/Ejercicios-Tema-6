@@ -2,6 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Set;
+import java.util.TreeSet;
+
+
 
 import Ejercicio1.Pareja;
 import Ejercicio2.ListaDatosReales;
@@ -10,6 +16,9 @@ import Ejercicio4.ListaCadenasCaracteres;
 import Ejercicio5.ListaCadenasCaracteresej5;
 import Ejercicio6.ListaCadenasOrdenadaej6;
 import Ejercicio7.MapaNumerosTexto;
+import Ejercicio8.MapaNumerosLetras;
+import Ejercicio9.NombreCompleto;
+
 
 
 public class Main {
@@ -63,6 +72,13 @@ public class Main {
         JButton ejercicio7Button = new JButton("Ejercicio 7");
         panel.add(ejercicio7Button);
 
+        JButton ejercicio8Button = new JButton("Ejercicio 8");
+        panel.add(ejercicio8Button);
+
+
+        JButton ejercicio9Button = new JButton("Ejercicio 9");
+        panel.add(ejercicio9Button);
+
         // Acción del botón del Ejercicio 1
         ejercicio1Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 1");
@@ -103,6 +119,18 @@ public class Main {
         ejercicio7Button.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 7");
             ejercicio7();
+        });
+
+        // Acción del botón del Ejercicio 8
+        ejercicio8Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 8");
+            ejercicio8();
+        });
+
+        // Acción del botón del Ejercicio 9
+        ejercicio9Button.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Has seleccionado el Ejercicio 9");
+            ejercicio9();
         });
     }
 
@@ -213,6 +241,57 @@ public class Main {
             contenido.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");
         }
         JOptionPane.showMessageDialog(null, contenido.toString());
+    }
+
+    // Método para el Ejercicio 8
+    private static void ejercicio8() {
+        MapaNumerosLetras mapa = new MapaNumerosLetras();
+        String opcion;
+        do {
+            opcion = JOptionPane.showInputDialog("1. Agregar par número/letra\n2. Obtener letra por número\n0. Salir");
+            switch (opcion) {
+                case "1":
+                    int numero = Integer.parseInt(JOptionPane.showInputDialog("Introduce un número:"));
+                    char letra = JOptionPane.showInputDialog("Introduce una letra:").charAt(0);
+                    mapa.agregarPar(numero, letra);
+                    break;
+                case "2":
+                    int numeroBuscar = Integer.parseInt(JOptionPane.showInputDialog("Introduce el número para obtener la letra:"));
+                    char letraObtenida = mapa.obtenerLetra(numeroBuscar);
+                    if (letraObtenida != '\0') {
+                        JOptionPane.showMessageDialog(null, "La letra correspondiente al número " + numeroBuscar + " es: " + letraObtenida);
+                    }
+                    break;
+                case "0":
+                    JOptionPane.showMessageDialog(null, "Saliendo del Ejercicio 8.");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción no válida, por favor introduce un número válido.");
+            }
+        } while (!opcion.equals("0"));
+    }
+
+    // Método para el Ejercicio 9
+    private static void ejercicio9() {
+        // Crear un TreeSet para almacenar los nombres completos ordenados por apellido
+        Set<NombreCompleto> nombresOrdenados = new TreeSet<>();
+
+        // Solicitar al usuario que ingrese pares de nombre/apellido
+        String opcion;
+        do {
+            String nombre = JOptionPane.showInputDialog("Introduce el nombre:");
+            String apellido = JOptionPane.showInputDialog("Introduce el apellido:");
+            NombreCompleto nombreCompleto = new NombreCompleto(nombre, apellido);
+            nombresOrdenados.add(nombreCompleto);
+            opcion = JOptionPane.showInputDialog("¿Deseas ingresar otro nombre? (s/n):");
+        } while (!opcion.equalsIgnoreCase("n"));
+
+        // Mostrar los nombres ordenados alfabéticamente por apellido
+        StringBuilder listaNombres = new StringBuilder("Nombres ordenados alfabéticamente por apellido:\n");
+        for (NombreCompleto nombre : nombresOrdenados) {
+            listaNombres.append(nombre).append("\n");
+        }
+        JOptionPane.showMessageDialog(null, listaNombres.toString());
     }
 
 
